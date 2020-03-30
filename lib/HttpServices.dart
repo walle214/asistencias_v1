@@ -6,7 +6,7 @@ import 'package:http/http.dart';
 import 'package:provider/provider.dart';
 import 'package:http/http.dart' as http;
 
-class HttpServices {
+abstract class HttpServices {
   static final String _baseUrl =
       'https://sistemas.cruzperez.com/flutter-asistencias/';
 

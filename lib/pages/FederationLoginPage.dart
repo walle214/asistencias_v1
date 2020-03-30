@@ -1,17 +1,22 @@
+import 'package:asistencias_v1/providers/DatosFederacion.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'package:webview_flutter/webview_flutter.dart';
 
-class FederationPage extends StatelessWidget {
-  final Function onMessageReceived;
-  final String initialUrl;
-
-  const FederationPage(
-      {Key key, @required this.initialUrl, @required this.onMessageReceived})
-      : super(key: key);
+class FederationLoginPage extends StatelessWidget {
   JavascriptChannel _loginJavascriptChannel(BuildContext context) {
     return JavascriptChannel(
       name: 'Login',
-      onMessageReceived: onMessageReceived,
+      onMessageReceived: (JavascriptMessage message) {
+        final waifuProvider =
+            Provider.of<DatosFederacion>(context, listen: false);
+        waifuProvider.initWaifuData(message.message);
+        Navigator.pushNamedAndRemoveUntil(
+          context,
+          'plantel',
+          (route) => false,
+        );
+      },
     );
   }
 
@@ -21,7 +26,8 @@ class FederationPage extends StatelessWidget {
       child: Center(
         child: SafeArea(
           child: WebView(
-            initialUrl: initialUrl,
+            initialUrl:
+                'https://sistemas.cruzperez.com/flutter-asistencias/login.php',
             javascriptMode: JavascriptMode.unrestricted,
             javascriptChannels: <JavascriptChannel>[
               _loginJavascriptChannel(context),

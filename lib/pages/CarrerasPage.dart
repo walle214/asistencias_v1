@@ -1,7 +1,7 @@
 import 'package:asistencias_v1/HttpServices.dart';
 import 'package:asistencias_v1/providers/DatosGrupos.dart';
-import 'package:asistencias_v1/widgets/AppBarUDC.dart';
-import 'package:asistencias_v1/widgets/ButtonsWidgets.dart';
+
+import 'package:asistencias_v1/widgets/custom_widgets.dart';
 
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -11,9 +11,8 @@ class CarrerasPage extends StatelessWidget {
   const CarrerasPage({Key key, this.indexPlantel = 0}) : super(key: key);
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: appBarUDC(),
-      body: Center(child: body(context)),
+    return SimplePage(
+      child: body(context),
     );
   }
 
@@ -22,24 +21,24 @@ class CarrerasPage extends StatelessWidget {
 
     if (datosGrupos.isEmpty) {
       HttpServices.getGrupos(context);
-      return CircularProgressIndicator();
+      return Center(child: CircularProgressIndicator());
     }
     final carreras =
         Provider.of<DatosGrupos>(context).data.plantel[indexPlantel].carreras;
     // if(carreras.length  0)
-    return ListView.builder(
-      itemCount: carreras.length,
-      itemBuilder: (context, index) {
-        final delay = index * 350;
-        final carrera = carreras[index];
-        return CarreraLightBlueButton(
-          textButton: carrera.nombre ?? 'Hola',
-          delay: delay,
-        );
-      },
-    );
-
-    return Container();
+    return carreras != null
+        ? ListView.builder(
+            itemCount: carreras.length,
+            itemBuilder: (context, index) {
+              final delay = index * 350;
+              final carrera = carreras[index];
+              return CarreraLightBlueButton(
+                carrera.nombre ?? 'Hola',
+                delay,
+              );
+            },
+          )
+        : Container();
   }
 }
 
@@ -48,11 +47,11 @@ class CarreraLightBlueButton extends LightBlueButton {
 
   final String textButton;
 
-  CarreraLightBlueButton({@required this.textButton, @required this.delay})
-      : super(textButton: textButton, delay: delay);
+  CarreraLightBlueButton(this.textButton, this.delay)
+      : super(textButton, delay);
 
   @override
   void onPresed(BuildContext context) {
-    print(context.widget);
+    // print(context.widget);
   }
 }

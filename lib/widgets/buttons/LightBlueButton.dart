@@ -1,38 +1,15 @@
-import 'package:animate_do/animate_do.dart';
-import 'package:asistencias_v1/widgets/CustomColors.dart';
 import 'package:flutter/material.dart';
+import 'package:animate_do/animate_do.dart';
 
-class ButtonAlumno extends StatefulWidget {
-  final String alumnoName;
-  final String color;
-  ButtonAlumno({Key key, @required this.alumnoName, this.color = 'VERDE'})
-      : super(key: key);
-
-  @override
-  ButtonAlumnoState createState() => ButtonAlumnoState();
-}
-
-class ButtonAlumnoState extends State<ButtonAlumno> {
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      child: Container(),
-    );
-  }
-}
+import 'package:asistencias_v1/widgets/CustomColors.dart';
 
 abstract class LightBlueButton extends StatelessWidget {
-
   void onPresed(BuildContext context);
-
 
   final String textButton;
   final int delay;
 
-  // final Map<String, dynamic> params;
-  // final Function callBack;
-
-  LightBlueButton({@required this.textButton, @required this.delay});
+  LightBlueButton(this.textButton, this.delay);
 
   @override
   Widget build(BuildContext context) {
@@ -52,7 +29,7 @@ abstract class LightBlueButton extends StatelessWidget {
                   fontWeight: FontWeight.w800),
             ),
           ),
-          onPressed: ()=>onPresed(context),
+          onPressed: () => onPresed(context),
         ),
       ),
     );

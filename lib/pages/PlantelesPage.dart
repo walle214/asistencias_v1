@@ -1,12 +1,8 @@
-import 'package:animate_do/animate_do.dart';
 import 'package:asistencias_v1/HttpServices.dart';
-
 import 'package:asistencias_v1/pages/CarrerasPage.dart';
-
 import 'package:asistencias_v1/providers/DatosGrupos.dart';
 
-import 'package:asistencias_v1/widgets/AppBarUDC.dart';
-import 'package:asistencias_v1/widgets/ButtonsWidgets.dart';
+import 'package:asistencias_v1/widgets/custom_widgets.dart';
 
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -15,9 +11,8 @@ class PlantelesPage extends StatelessWidget {
   const PlantelesPage({Key key}) : super(key: key);
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: appBarUDC(),
-      body: Center(child: body(context)),
+    return SimplePage(
+      child: body(context),
     );
   }
 
@@ -26,23 +21,25 @@ class PlantelesPage extends StatelessWidget {
 
     if (datosGrupos.isEmpty) {
       HttpServices.getGrupos(context);
-      return CircularProgressIndicator();
+      return Center(child: CircularProgressIndicator());
     }
     final planteles = datosGrupos.data.plantel;
 
-    if (planteles.length == 0)
+    if (planteles.length == 0 || planteles.length == null)
       return Text('No hay grupos para mostrar');
     else if (planteles.length == 1)
-      CarrerasPage(indexPlantel: 0);
+      openCarreraPage(context, 0);
     else if (planteles.length > 1) {
-      final planteles = Provider.of<DatosGrupos>(context).data.plantel;
       return ListView.builder(
         itemCount: planteles.length,
         itemBuilder: (context, index) {
           final delay = index * 350;
           final plantel = planteles[index];
-          return PlantelLightBlueButton(
-              textButton: plantel.nombre, delay: delay, plantelIndex: index);
+          return _PlantelLightBlueButton(
+            plantel.nombre,
+            delay,
+            index,
+          );
         },
       );
     }
@@ -50,29 +47,29 @@ class PlantelesPage extends StatelessWidget {
   }
 }
 
-class PlantelLightBlueButton extends LightBlueButton {
+void openCarreraPage(BuildContext context, int plantelIndex) {
+  Navigator.push(
+    context,
+    MaterialPageRoute(
+      builder: (context) => CarrerasPage(
+        indexPlantel: plantelIndex,
+      ),
+    ),
+  );
+}
+
+class _PlantelLightBlueButton extends LightBlueButton {
   final int delay;
 
   final String textButton;
 
   final int plantelIndex;
 
-  PlantelLightBlueButton(
-      {@required this.textButton,
-      @required this.delay,
-      @required this.plantelIndex})
-      : super(textButton: textButton, delay: delay);
+  _PlantelLightBlueButton(this.textButton, this.delay, this.plantelIndex)
+      : super(textButton, delay);
 
   @override
   void onPresed(BuildContext context) {
-    // print(context.widget);
-    Navigator.push(
-      context,
-      MaterialPageRoute(
-        builder: (context) => CarrerasPage(
-          indexPlantel: plantelIndex,
-        ),
-      ),
-    );
+    openCarreraPage(context, plantelIndex);
   }
 }
