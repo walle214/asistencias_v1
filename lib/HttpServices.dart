@@ -1,5 +1,4 @@
-import 'package:asistencias_v1/providers/DatosFederacion.dart';
-import 'package:asistencias_v1/providers/DatosGrupos.dart';
+import 'package:asistencias_v1/providers/provider_collection.dart';
 
 import 'package:flutter/material.dart';
 import 'package:http/http.dart';
@@ -23,5 +22,21 @@ abstract class HttpServices {
 
     Response response = await http.get(url);
     datosGrupos.initGruposData(response.body);
+  }
+
+  static void getAlumnosList(BuildContext context, String grupoKey) async {
+    DatosGrupos providerDatosGrupos = Provider.of<DatosGrupos>(context);
+    DatosAlumnos providerDatosAlumnos = Provider.of<DatosAlumnos>(context);
+    DatosClases providerDatosClases = Provider.of<DatosClases>(context);
+    String token = providerDatosGrupos.data.token;
+    String endpoint = providerDatosGrupos.data.endpoint;
+
+    String url = '$_baseUrl/alumnos/$token/$endpoint/$grupoKey/';
+
+    Response res = await http.get(url);
+
+    final alumnosList = providerDatosAlumnos.addAlumnosData(res.body, grupoKey);
+
+    providerDatosClases.addAlumnos(alumnosList, grupoKey);
   }
 }

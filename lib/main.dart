@@ -1,12 +1,9 @@
-import 'package:asistencias_v1/pages/LoginPage.dart';
-import 'package:asistencias_v1/pages/PlantelesPage.dart';
-import 'package:asistencias_v1/providers/DatosFederacion.dart';
-import 'package:asistencias_v1/providers/DatosGrupos.dart';
+import 'package:asistencias_v1/providers/provider_collection.dart';
 import 'package:flutter/material.dart';
 
 import 'package:provider/provider.dart';
 
-import 'package:asistencias_v1/pages/FederationLoginPage.dart';
+import 'package:asistencias_v1/pages/pages_collection.dart';
 
 void main() => runApp(MyApp());
 
@@ -17,6 +14,8 @@ class MyApp extends StatelessWidget {
       providers: [
         ChangeNotifierProvider(create: (context) => DatosFederacion()),
         ChangeNotifierProvider(create: (context) => DatosGrupos()),
+        ChangeNotifierProvider(create: (context) => DatosAlumnos()),
+        ChangeNotifierProvider(create: (context) => DatosClases()),
       ],
       child: MaterialApp(
         debugShowCheckedModeBanner: false,

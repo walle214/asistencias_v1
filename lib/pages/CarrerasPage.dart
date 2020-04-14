@@ -1,4 +1,5 @@
-import 'package:asistencias_v1/HttpServices.dart';
+import 'package:asistencias_v1/models/grupos.dart';
+import 'package:asistencias_v1/pages/pages_collection.dart';
 import 'package:asistencias_v1/providers/DatosGrupos.dart';
 
 import 'package:asistencias_v1/widgets/custom_widgets.dart';
@@ -7,51 +8,80 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 class CarrerasPage extends StatelessWidget {
+  final String title;
   final int indexPlantel;
-  const CarrerasPage({Key key, this.indexPlantel = 0}) : super(key: key);
+  const CarrerasPage({Key key, @required this.indexPlantel, this.title})
+      : super(key: key);
   @override
   Widget build(BuildContext context) {
+    final datosGruposProvider =
+        Provider.of<DatosGrupos>(context).data.plantel[indexPlantel];
+    if (datosGruposProvider.carreras.length == 1)
+      return GruposPage(
+        indexCarrera: 0,
+        indexPlantel: indexPlantel,
+        title: datosGruposProvider.carreras[0].nombre ??
+            datosGruposProvider.nombre,
+      );
     return SimplePage(
-      child: body(context),
+      child: _body(context),
+      title: title,
     );
   }
 
-  Widget body(BuildContext context) {
-    final datosGrupos = Provider.of<DatosGrupos>(context);
+  Widget _body(BuildContext context) {
+    final providerDatosGrupos = Provider.of<DatosGrupos>(context);
 
-    if (datosGrupos.isEmpty) {
-      HttpServices.getGrupos(context);
-      return Center(child: CircularProgressIndicator());
-    }
-    final carreras =
-        Provider.of<DatosGrupos>(context).data.plantel[indexPlantel].carreras;
-    // if(carreras.length  0)
-    return carreras != null
-        ? ListView.builder(
-            itemCount: carreras.length,
-            itemBuilder: (context, index) {
-              final delay = index * 350;
-              final carrera = carreras[index];
-              return CarreraLightBlueButton(
-                carrera.nombre ?? 'Hola',
-                delay,
-              );
-            },
-          )
-        : Container();
+    if (providerDatosGrupos.isEmpty)
+      Navigator.pushNamedAndRemoveUntil(context, 'plantel', (route) => false);
+
+    final carreras = providerDatosGrupos.data.plantel[indexPlantel].carreras;
+    if (carreras.length == 0 || carreras == null)
+      return Text('No hay carreras para mostrar');
+    else if (carreras.length >= 1)
+      return _ListCarreras(
+        carreras: carreras,
+        indexPlantel: indexPlantel,
+      );
+    return Container();
   }
 }
 
-class CarreraLightBlueButton extends LightBlueButton {
-  final int delay;
+class _ListCarreras extends StatelessWidget {
+  final List<Carrera> carreras;
 
-  final String textButton;
+  final int indexPlantel;
 
-  CarreraLightBlueButton(this.textButton, this.delay)
-      : super(textButton, delay);
+  _ListCarreras({
+    @required this.carreras,
+    @required this.indexPlantel,
+  });
 
   @override
-  void onPresed(BuildContext context) {
-    // print(context.widget);
+  Widget build(BuildContext context) {
+    return ListView.builder(
+      itemCount: carreras.length,
+      itemBuilder: (context, index) {
+        final delay = index;
+        final carrera = carreras[index];
+        return LightBlueButton(
+          carrera.nombre ?? 'Sin nombre',
+          delay,
+          (context) => _openAlumnosPage(context, index, carrera.nombre),
+        );
+      },
+    );
   }
+
+  void _openAlumnosPage(BuildContext context, int index, String nombre) =>
+      Navigator.push(
+        context,
+        MaterialPageRoute(
+          builder: (context) => GruposPage(
+            indexPlantel: indexPlantel,
+            indexCarrera: index,
+            title: nombre,
+          ),
+        ),
+      );
 }
