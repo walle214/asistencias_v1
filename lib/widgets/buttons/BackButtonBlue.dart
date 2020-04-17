@@ -13,9 +13,10 @@ class BackButtonBlue extends StatelessWidget {
     final size = MediaQuery.of(context).size;
     return animateDo.SlideInUp(
       child: Container(
-        height: 65,
+        height: 50,
         width: size.width,
         child: FlatButton.icon(
+          shape: RoundedRectangleBorder(),
           color: CustomColors.darkBlue,
           textColor: Colors.white,
           onPressed: () => Navigator.canPop(context)

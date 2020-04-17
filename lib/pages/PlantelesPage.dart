@@ -1,6 +1,5 @@
 import 'package:asistencias_v1/HttpServices.dart';
 import 'package:asistencias_v1/models/grupos.dart';
-
 import 'package:asistencias_v1/widgets/custom_widgets.dart';
 import 'package:asistencias_v1/providers/provider_collection.dart';
 import 'package:asistencias_v1/pages/pages_collection.dart';
@@ -49,10 +48,10 @@ class _PlantelList extends StatelessWidget {
         final plantel = planteles[index];
         return LightBlueButton(
           plantel.nombre,
-          delay,
           (context) {
             _openCarreraPage(context, index, plantel.nombre);
           },
+          delay: delay,
         );
       },
     );

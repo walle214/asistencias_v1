@@ -40,12 +40,13 @@ class GruposPage extends StatelessWidget {
                 buttonsGruposIds.add(
                   LightBlueButton(
                     text,
-                    count,
                     (context) {
                       Navigator.push(
                         context,
                         MaterialPageRoute(
                           builder: (context) => AlumnosList(
+                            planelNombre: title,
+                            materiaNombre: text,
                             indexPlantel: indexPlantel,
                             indexCarrera: indexCarrera,
                             idGrupo: grupo.id,
@@ -55,6 +56,7 @@ class GruposPage extends StatelessWidget {
                         ),
                       );
                     },
+                    delay: count,
                   ),
                 );
               },

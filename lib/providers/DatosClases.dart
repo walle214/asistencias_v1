@@ -5,27 +5,23 @@ import 'package:provider/provider.dart';
 import 'provider_collection.dart';
 
 class DatosClases with ChangeNotifier {
-  Map<String, ClaseData> clases = Map();
+  Map<String, ClaseData> _clases = Map();
 
   ClaseData getClaseData({
     @required String idGrupo,
     @required String idClase,
   }) =>
-      clases['$idGrupo-$idClase'];
+      _clases['$idGrupo-$idClase'];
 
   ClaseData addClaseData({
     @required int horas,
     @required String idGrupo,
     @required String idClase,
   }) {
-    clases['$idGrupo-$idClase'] = clases['$idGrupo-$idClase'] ??
-        ClaseData(
-          horas: horas,
-          idGrupo: idGrupo,
-          idClase: idClase,
-        );
+    _clases['$idGrupo-$idClase'] =
+        _clases['$idGrupo-$idClase'] ?? ClaseData(idClase, idGrupo, horas);
     //notifyListeners();
-    return clases['$idGrupo-$idClase'];
+    return _clases['$idGrupo-$idClase'];
   }
 
   AlumnosData getAlumnosList(
@@ -37,11 +33,13 @@ class DatosClases with ChangeNotifier {
     return alumnosProvider.getAlumnosData(idGrupo);
   }
 
-  void addAlumnos(AlumnosData alumnosList, String grupoKey) {
-    clases.keys.forEach((key) {
-      final idGrupo = key.split('-')[0];
-      if (grupoKey == idGrupo) clases[key].alumnos = alumnosList;
-    });
+  void changeLength(int length, String grupoKey) {
+    _clases.keys.forEach(
+      (key) {
+        final idGrupo = key.split('-')[0];
+        if (grupoKey == idGrupo) _clases[key].asistenciasLength = length;
+      },
+    );
     notifyListeners();
   }
 }

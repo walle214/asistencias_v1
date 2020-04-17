@@ -37,6 +37,6 @@ abstract class HttpServices {
 
     final alumnosList = providerDatosAlumnos.addAlumnosData(res.body, grupoKey);
 
-    providerDatosClases.addAlumnos(alumnosList, grupoKey);
+    providerDatosClases.changeLength(alumnosList.alumnos.length, grupoKey);
   }
 }

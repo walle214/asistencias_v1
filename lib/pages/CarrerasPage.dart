@@ -62,12 +62,11 @@ class _ListCarreras extends StatelessWidget {
     return ListView.builder(
       itemCount: carreras.length,
       itemBuilder: (context, index) {
-        final delay = index;
         final carrera = carreras[index];
         return LightBlueButton(
           carrera.nombre ?? 'Sin nombre',
-          delay,
           (context) => _openAlumnosPage(context, index, carrera.nombre),
+          delay: index,
         );
       },
     );

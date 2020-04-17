@@ -16,17 +16,17 @@ class LightBlueButton extends StatelessWidget {
 
   LightBlueButton(
     this.textButton,
-    this.delay,
     this.callBack, {
+    this.delay = 0,
     this.animate = true,
   });
 
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: EdgeInsets.only(bottom: 15.0, right: 10.0, left: 10.0),
+      padding: EdgeInsets.only(bottom: 15.0, right: 15.0, left: 15.0),
       child: animate
-          ? FadeInLeftBig(
+          ? ZoomIn(
               delay: Duration(milliseconds: delay * delayButtons),
               child: _buildRaisedButton(context),
             )
@@ -34,8 +34,8 @@ class LightBlueButton extends StatelessWidget {
     );
   }
 
-  RaisedButton _buildRaisedButton(BuildContext context) {
-    return RaisedButton(
+  FlatButton _buildRaisedButton(BuildContext context) {
+    return FlatButton(
       color: CustomColors.blue,
       child: Container(
         margin: EdgeInsets.symmetric(vertical: 20.0),

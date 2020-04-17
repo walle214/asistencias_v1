@@ -30,7 +30,6 @@ class LoginPage extends StatelessWidget {
               width: double.infinity,
               child: LightBlueButton(
                 'Inciar sesión',
-                0,
                 (context) => Navigator.pushNamedAndRemoveUntil(
                     context, 'federationLogin', (route) => false),
                 animate: false,
